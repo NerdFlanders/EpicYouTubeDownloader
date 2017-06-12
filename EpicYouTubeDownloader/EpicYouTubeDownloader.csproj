@@ -94,6 +94,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\Download\DownloadControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Download\DownloadListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Download\DownloadView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ShellView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,7 +115,19 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bootstrap\Bootstrapper.cs" />
+    <Compile Include="ViewModels\Download\DownloadControlViewModel.cs" />
+    <Compile Include="ViewModels\Download\DownloadListViewModel.cs" />
+    <Compile Include="ViewModels\Download\DownloadViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="Views\Download\DownloadControlView.xaml.cs">
+      <DependentUpon>DownloadControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Download\DownloadListView.xaml.cs">
+      <DependentUpon>DownloadListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Download\DownloadView.xaml.cs">
+      <DependentUpon>DownloadView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -139,6 +163,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
+    <Folder Include="ViewModels\Options\" />
+    <Folder Include="Views\Options\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
