@@ -2,8 +2,6 @@
 using System.Net;
 using System.Windows;
 using Caliburn.Micro;
-using MediaToolkit;
-using MediaToolkit.Model;
 
 namespace EpicYouTubeDownloader.ViewModels.Download
 {
@@ -19,18 +17,32 @@ namespace EpicYouTubeDownloader.ViewModels.Download
 
         #endregion
 
+        #region Constructor
+
         public DownloadControlViewModel()
         {
             
         }
+
+        #endregion
 
         public void Paste()
         {
             link = Clipboard.GetText();
             if (verifyLink(link))
             {
-                
+                //add link to downloadlist view with thumbnail, name
+
+                string[] links = new string[1];
+                links[0] = link;
+                DownloadCoreService s = new DownloadCoreService();
+                s.DownloadMP3(links, @"D:\Musik");
             }
+        }
+
+        public void Download()
+        {
+            
         }
 
         private bool verifyLink(string link)
