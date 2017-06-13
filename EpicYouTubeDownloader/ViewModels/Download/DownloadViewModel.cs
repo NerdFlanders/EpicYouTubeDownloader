@@ -6,9 +6,14 @@ namespace EpicYouTubeDownloader.ViewModels.Download
     {
         public DownloadControlViewModel DownloadControlViewModel { get; set; }
 
-        public DownloadViewModel(DownloadControlViewModel downloadControlViewModel)
+        public DownloadListViewModel DownloadListViewModel { get; set; }
+
+
+        public DownloadViewModel(DownloadControlViewModel downloadControlViewModel,
+                                DownloadListViewModel downloadListViewModel)
         {
-            //DownloadControlViewModel = downloadControlViewModel;
+            DownloadControlViewModel = downloadControlViewModel;
+            DownloadListViewModel = downloadListViewModel;
         }
     }
 }

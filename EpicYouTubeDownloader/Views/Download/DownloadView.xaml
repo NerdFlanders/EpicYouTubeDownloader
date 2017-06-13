@@ -11,16 +11,15 @@
             <BooleanToVisibilityConverter x:Key="BoolToVis" />
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="55"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <ContentControl x:Name="DownloadControlViewModel" 
                         Grid.Row="0" 
                         Margin="0"/>
 
-        <!--<ContentControl x:Name="DownloadListViewModel" 
-                        Grid.Row="0" 
-                        Margin="10, 5"/>-->
-
+        <ContentControl x:Name="DownloadListViewModel" 
+                        Grid.Row="1" 
+                        Margin="10, 5"/>
     </Grid>
 </UserControl>
