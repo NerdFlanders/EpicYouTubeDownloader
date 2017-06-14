@@ -8,7 +8,9 @@ using System.Web;
 using System.Collections.Generic;
 using System.Web.Script.Serialization;
 using EpicYouTubeDownloader.Models.Domain;
+using Google.YouTube;
 using VideoLibrary;
+using Video = VideoLibrary.Video;
 
 namespace EpicYouTubeDownloader
 {
@@ -44,11 +46,14 @@ namespace EpicYouTubeDownloader
             {
                 try
                 {
+                    //var video = youtube.GetVideo(link);
+
                     YouTubeVideo audio =
-                        youtube.GetAllVideos(link)
+                        youtube.GetAllVideos("http://www.youtube.com/watch?v=eZUSxaFW8Lk")
                             .Where(e => e.AudioFormat == AudioFormat.Aac && e.AdaptiveKind == AdaptiveKind.Audio)
                             .ToList()
                             .FirstOrDefault();
+                    
                     string filename =
                         Path.ChangeExtension(Path.Combine(destPath, Path.GetFileNameWithoutExtension(audio.FullName)),
                             "mp3");
