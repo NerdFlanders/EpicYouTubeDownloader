@@ -29,6 +29,11 @@ namespace EpicYouTubeDownloader.ViewModels.Download
         public void Paste()
         {
             link = Clipboard.GetText();
+            //verify link and show error
+        }
+
+        public void Download()
+        {
             if (verifyLink(link))
             {
                 //add link to downloadlist view with thumbnail, name
@@ -36,13 +41,8 @@ namespace EpicYouTubeDownloader.ViewModels.Download
                 string[] links = new string[1];
                 links[0] = link;
                 DownloadCoreService s = new DownloadCoreService();
-                s.DownloadMP3(links, @"D:\Musik");
+                s.DownloadMP3(links, @"D:\Musik\09-06-2017");
             }
-        }
-
-        public void Download()
-        {
-            
         }
 
         private bool verifyLink(string link)
@@ -53,7 +53,8 @@ namespace EpicYouTubeDownloader.ViewModels.Download
             {
                 isVerified = true;
             }
-            if (link.StartsWith("https://www.youtube.com/watch?v="))
+
+            if (isVerified)
             {
                 HttpWebRequest request = (HttpWebRequest) HttpWebRequest.Create(link);
                 request.Method = "HEAD";

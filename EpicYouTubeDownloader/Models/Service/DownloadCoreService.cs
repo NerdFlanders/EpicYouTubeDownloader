@@ -6,11 +6,12 @@ using System;
 using System.Net;
 using System.Web;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using EpicYouTubeDownloader.Models.Domain;
-using Google.YouTube;
+using Google.Apis.YouTube.v3.Data;
+using MediaToolkit.Options;
 using VideoLibrary;
-using Video = VideoLibrary.Video;
 
 namespace EpicYouTubeDownloader
 {
@@ -21,6 +22,9 @@ namespace EpicYouTubeDownloader
         private int songNumber;
         private int convertedSong;
         private string link;
+        private const string YoutubeLinkRegex = "(?:.+?)?(?:\\/v\\/|watch\\/|\\?v=|\\&v=|youtu\\.be\\/|\\/v=|^youtu\\.be\\/)([a-zA-Z0-9_-]{11})+";
+        private static Regex regexExtractId = new Regex(YoutubeLinkRegex, RegexOptions.Compiled);
+        private static string[] validAuthorities = { "youtube.com", "www.youtube.com", "youtu.be", "www.youtu.be" };
         #endregion
 
         #region Public Properties
@@ -34,9 +38,10 @@ namespace EpicYouTubeDownloader
         {
             songNumber = links.Length;
             if (links.Length == 0)
-                throw new Exception("Il file txt è vuoto");
+                throw new Exception("No links available.");
             if (!Directory.Exists(destPath))
-                throw new DirectoryNotFoundException("Il path di destinazione non esiste");
+                throw new DirectoryNotFoundException("Destination path does not exist.");
+
             YouTube youtube = YouTube.Default;
             convertedSong = 0;
             ReturnError results = new ReturnError();
@@ -46,10 +51,8 @@ namespace EpicYouTubeDownloader
             {
                 try
                 {
-                    //var video = youtube.GetVideo(link);
-
                     YouTubeVideo audio =
-                        youtube.GetAllVideos("http://www.youtube.com/watch?v=eZUSxaFW8Lk")
+                        youtube.GetAllVideos(link)
                             .Where(e => e.AudioFormat == AudioFormat.Aac && e.AdaptiveKind == AdaptiveKind.Audio)
                             .ToList()
                             .FirstOrDefault();
@@ -62,11 +65,11 @@ namespace EpicYouTubeDownloader
                     MediaFile inputFile = new MediaFile {Filename = audio.GetUri()};
                     MediaFile outputFile = new MediaFile {Filename = filename};
 
+                    getThumbnail(link);
+
                     using (Engine engine = new Engine())
                     {
-
                         engine.GetMetadata(inputFile);
-
                         engine.Convert(inputFile, outputFile);
                     }
                 }
@@ -123,6 +126,46 @@ namespace EpicYouTubeDownloader
             }
             errorRes = DownloadMP3(youtubesongs, destPath);
             return errorRes;
+        }
+
+        private byte getThumbnail(string link)
+        {
+            //https://www.youtube.com/watch?v=P_SlAzsXa7E&list=RDdZX6Q-Bj_xg
+            Uri uri = new Uri(link);
+            string id = ExtractVideoIdFromUri(uri);
+
+            byte pic = Byte.MaxValue;
+
+            WebClient cli = new WebClient();
+
+            var imgBytes = cli.DownloadData("http://img.youtube.com/vi/" + id + "/3.jpg");
+
+            File.WriteAllBytes(@"D:\Musik\09-06-2017\thumb.jpg", imgBytes);
+
+            return pic;
+        }
+
+        public string ExtractVideoIdFromUri(Uri uri)
+        {
+            try
+            {
+                string authority = new UriBuilder(uri).Uri.Authority.ToLower();
+
+                //check if the url is a youtube url
+                if (validAuthorities.Contains(authority))
+                {
+                    //and extract the id
+                    var regRes = regexExtractId.Match(uri.ToString());
+                    if (regRes.Success)
+                    {
+                        return regRes.Groups[1].Value;
+                    }
+                }
+            }
+            catch { }
+
+
+            return null;
         }
 
         #endregion
