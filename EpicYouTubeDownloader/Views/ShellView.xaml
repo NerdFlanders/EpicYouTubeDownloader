@@ -4,9 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:cal="http://www.caliburnproject.org"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
         mc:Ignorable="d"
         Title="EpicYouTubeDownloader" Height="650" Width="825">
+    
     <Grid>
+        
         <TabControl x:Name="TabControl" 
                     cal:Message.Attach="[Event SelectionChanged] = [Action OnTabSelectionChanged($source)]">
             <TabControl.Resources>
@@ -23,17 +30,24 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="#FFFFFF" />
+                                        <Setter TargetName="Border" Property="Background" Value="#03A9F4" />
+                                        <Setter TargetName="Border" Property="CornerRadius" Value="5,5,0,0" />
+                                        <Setter Property="Foreground" Value="#FFFFFF" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="False">
-                                        <Setter TargetName="Border" Property="Background" Value="#c3d1aa" />
+                                        <Setter TargetName="Border" Property="Background" Value="#03A9F4" />
+                                        <Setter TargetName="Border" Property="CornerRadius" Value="5,5,0,0" />
                                         <Setter Property="Foreground" Value="#FFFFFF" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
+                    <Setter Property="Background" Value="#181818"></Setter>
                 </Style>
+            </TabControl.Resources>
+
+            <!--
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="BorderBrush" Value="#4D7239"/>
                     <Setter Property="BorderThickness" Value="1"/>
@@ -172,7 +186,7 @@
                         </Setter.Value>
                     </Setter>
                 </Style>
-            </TabControl.Resources>
+            </TabControl.Resources>-->
 
             <TabItem x:Name="TabItemOrder"
                      Header="Download" 
@@ -182,12 +196,12 @@
                                 Padding="0" 
                                 BorderThickness="0" />
             </TabItem>
-            <!--<TabItem Header="Options">
-                <ContentControl x:Name="OptionsViewModel" 
+            <TabItem Header="Settings">
+                <ContentControl x:Name="SettingsViewModel" 
                                 Margin="-2" 
                                 Padding="0" 
                                 BorderThickness="0" />
-            </TabItem>-->
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

@@ -29,48 +29,19 @@ namespace EpicYouTubeDownloader.ViewModels.Download
         public void Paste()
         {
             link = Clipboard.GetText();
+            PasteCoreService _pasteCoreService = new PasteCoreService(link);
+
+            _pasteCoreService.verifyLink();
             //verify link and show error
         }
 
         public void Download()
         {
-            if (verifyLink(link))
-            {
-                //add link to downloadlist view with thumbnail, name
-
-                string[] links = new string[1];
-                links[0] = link;
-                DownloadCoreService s = new DownloadCoreService();
-                s.DownloadMP3(links, @"D:\Musik\09-06-2017");
-            }
-        }
-
-        private bool verifyLink(string link)
-        {
-            bool isVerified = false;
-
-            if (link.StartsWith("https://www.youtube.com/watch?v="))
-            {
-                isVerified = true;
-            }
-
-            if (isVerified)
-            {
-                HttpWebRequest request = (HttpWebRequest) HttpWebRequest.Create(link);
-                request.Method = "HEAD";
-                try
-                {
-                    using (HttpWebResponse response = (HttpWebResponse) request.GetResponse())
-                    {
-                        isVerified = true;
-                    }
-                }
-                catch (Exception exception)
-                {
-                    isVerified = false;
-                }
-            }
-            return isVerified;
+            //add link to downloadlist view with thumbnail, name
+            string[] links = new string[1];
+            links[0] = link;
+            DownloadCoreService s = new DownloadCoreService();
+            s.DownloadMP3(links, @"D:\Musik\09-06-2017");
         }
     }
 }

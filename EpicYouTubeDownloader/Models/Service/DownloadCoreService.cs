@@ -9,8 +9,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using EpicYouTubeDownloader.Models.Domain;
-using Google.Apis.YouTube.v3.Data;
-using MediaToolkit.Options;
 using VideoLibrary;
 
 namespace EpicYouTubeDownloader
