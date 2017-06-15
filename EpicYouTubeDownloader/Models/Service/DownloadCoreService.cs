@@ -17,7 +17,7 @@ namespace EpicYouTubeDownloader
     {
         #region Private Properties
 
-        private int songNumber;
+        private int _songCount;
         private int convertedSong;
         private string link;
         private const string YoutubeLinkRegex = "(?:.+?)?(?:\\/v\\/|watch\\/|\\?v=|\\&v=|youtu\\.be\\/|\\/v=|^youtu\\.be\\/)([a-zA-Z0-9_-]{11})+";
@@ -32,10 +32,10 @@ namespace EpicYouTubeDownloader
 
         #region Methods
 
-        public ReturnError DownloadMP3(string[] links, string destPath)
+        public ReturnError DownloadMP3(List<string> links, string destPath)
         {
-            songNumber = links.Length;
-            if (links.Length == 0)
+            _songCount = links.Count;
+            if (_songCount == 0)
                 throw new Exception("No links available.");
             if (!Directory.Exists(destPath))
                 throw new DirectoryNotFoundException("Destination path does not exist.");
@@ -117,8 +117,8 @@ namespace EpicYouTubeDownloader
                 tmpLinks = response.Split(new string[] { Environment.NewLine }, StringSplitOptions.None).ToList();
                 totalLinks = totalLinks.Concat(tmpLinks).ToList();
             }
-            string[] youtubesongs = totalLinks.ToArray();
-            for (int i = 0; i < youtubesongs.Length; i++)
+            List<string> youtubesongs = totalLinks.ToList();
+            for (int i = 0; i < youtubesongs.Count; i++)
             {
                 youtubesongs[i] = "https://www.youtube.com/watch?v=" + youtubesongs[i];
             }
@@ -161,7 +161,6 @@ namespace EpicYouTubeDownloader
                 }
             }
             catch { }
-
 
             return null;
         }

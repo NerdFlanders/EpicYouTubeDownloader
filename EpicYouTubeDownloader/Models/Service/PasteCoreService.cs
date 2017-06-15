@@ -24,26 +24,22 @@ namespace EpicYouTubeDownloader
         private static Regex regexExtractId = new Regex(YoutubeLinkRegex, RegexOptions.Compiled);
         private static string[] validAuthorities = { "youtube.com", "www.youtube.com", "youtu.be", "www.youtu.be" };
         private string _link;
+        private VerifyLinkService _verifyLinkService;
 
         #endregion
 
         #region Constructor
 
-        public PasteCoreService(string link)
-        {
-            _link = link;
-        }
+        
 
         #endregion
 
         #region Methods
 
-        public void doStuff()
+        public void getVideoData(string link)
         {
-            if (verifyLink())
-            {
-                getThumbnail();
-            }
+            _link = link;
+            getThumbnail();
         }
 
         private byte getThumbnail()
@@ -68,7 +64,6 @@ namespace EpicYouTubeDownloader
             try
             {
                 string authority = new UriBuilder(uri).Uri.Authority.ToLower();
-
                 //check if the url is a youtube url
                 if (validAuthorities.Contains(authority))
                 {
@@ -81,37 +76,10 @@ namespace EpicYouTubeDownloader
                 }
             }
             catch { }
-            
             return null;
         }
 
-        public bool verifyLink()
-        {
-            bool isVerified = false;
-
-            if (_link.StartsWith("https://www.youtube.com/watch?v="))
-            {
-                isVerified = true;
-            }
-
-            if (isVerified)
-            {
-                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(_link);
-                request.Method = "HEAD";
-                try
-                {
-                    using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                    {
-                        isVerified = true;
-                    }
-                }
-                catch (Exception exception)
-                {
-                    isVerified = false;
-                }
-            }
-            return isVerified;
-        }
+        
 
         #endregion
     }

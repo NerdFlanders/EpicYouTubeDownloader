@@ -182,6 +182,7 @@
     <Compile Include="Models\Domain\YTResponseItem.cs" />
     <Compile Include="Models\Service\DownloadCoreService.cs" />
     <Compile Include="Models\Service\PasteCoreService.cs" />
+    <Compile Include="Models\Service\VerifyLinkService.cs" />
     <Compile Include="ViewModels\Download\DownloadControlViewModel.cs" />
     <Compile Include="ViewModels\Download\DownloadListViewModel.cs" />
     <Compile Include="ViewModels\Download\DownloadViewModel.cs" />
