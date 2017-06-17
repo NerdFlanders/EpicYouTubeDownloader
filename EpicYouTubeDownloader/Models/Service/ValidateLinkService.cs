@@ -4,7 +4,7 @@ using System.Net;
 
 namespace EpicYouTubeDownloader
 {
-    public class VerifyLinkService
+    public class ValidateLinkService
     {
         #region Private Properties
 
@@ -12,17 +12,17 @@ namespace EpicYouTubeDownloader
 
         #endregion
 
-        public bool verifyLink(string link)
+        public bool validateLink(string link)
         {
             _link = link;
-            bool isVerified = false;
+            bool isValidate = false;
 
             if (link.StartsWith("https://www.youtube.com/watch?v="))
             {
-                isVerified = true;
+                isValidate = true;
             }
 
-            if (isVerified)
+            if (isValidate)
             {
                 HttpWebRequest request = (HttpWebRequest) HttpWebRequest.Create(link);
                 request.Method = "HEAD";
@@ -30,15 +30,15 @@ namespace EpicYouTubeDownloader
                 {
                     using (HttpWebResponse response = (HttpWebResponse) request.GetResponse())
                     {
-                        isVerified = true;
+                        isValidate = true;
                     }
                 }
                 catch (Exception exception)
                 {
-                    isVerified = false;
+                    isValidate = false;
                 }
             }
-            return isVerified;
+            return isValidate;
         }
     }
 }

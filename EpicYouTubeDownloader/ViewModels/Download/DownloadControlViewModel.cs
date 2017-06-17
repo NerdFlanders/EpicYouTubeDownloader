@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
+using EpicYouTubeDownloader.Models.Domain;
+using EpicYouTubeDownloader.ViewModels.EventArguments;
 
 namespace EpicYouTubeDownloader.ViewModels.Download
 {
@@ -10,22 +14,37 @@ namespace EpicYouTubeDownloader.ViewModels.Download
     {
         #region Public Poperties
 
+        public YTVideo Video
+        {
+            get { return _video; }
+            set
+            {
+                if (Equals(value, _video)) return;
+                _video = value;
+                NotifyOfPropertyChange(() => Video);
+            }
+        }
+
         #endregion
 
         #region Private Properties
 
         private List<string> _links = new List<string>();
         private string _singleLink;
-        private VerifyLinkService _verifyLinkService = new VerifyLinkService();
+        private ValidateLinkService _validateLinkService = new ValidateLinkService();
         private PasteCoreService _pasteCoreService = new PasteCoreService();
+        private YTVideo _video = new YTVideo();
+
+        private readonly IEventAggregator _eventAggregator;
+        
 
         #endregion
 
         #region Constructor
 
-        public DownloadControlViewModel()
+        public DownloadControlViewModel(IEventAggregator eventAggregator)
         {
-            
+            _eventAggregator = eventAggregator;
         }
 
         #endregion
@@ -33,14 +52,17 @@ namespace EpicYouTubeDownloader.ViewModels.Download
         public void Paste()
         {
             _singleLink = Clipboard.GetText();
-            if (_verifyLinkService.verifyLink(_singleLink))
+            if (_validateLinkService.validateLink(_singleLink))
             {
                 _links.Add(_singleLink);
                 _pasteCoreService.getVideoData(_singleLink);
+                _video = _pasteCoreService.video;
+
+                Video = _video;
+
+                _eventAggregator.Publish(new VideoAddedEventArgs(Video),
+                    action => { Task.Factory.StartNew(action); });
             }
-                 
-            
-            //verify link and show error
         }
 
         public void Download()

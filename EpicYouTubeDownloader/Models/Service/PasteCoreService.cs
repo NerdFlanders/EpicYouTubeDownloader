@@ -1,17 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Linq;
+using System.Drawing;
+using System.Text.RegularExpressions;
+using System.Windows.Media.Imaging;
+using EpicYouTubeDownloader.Models.Domain;
 using MediaToolkit;
 using MediaToolkit.Model;
-using System.IO;
-using System.Linq;
-using System;
-using System.Net;
-using System.Web;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Web.Script.Serialization;
-using EpicYouTubeDownloader.Models.Domain;
 using VideoLibrary;
 
 namespace EpicYouTubeDownloader
@@ -24,13 +20,20 @@ namespace EpicYouTubeDownloader
         private static Regex regexExtractId = new Regex(YoutubeLinkRegex, RegexOptions.Compiled);
         private static string[] validAuthorities = { "youtube.com", "www.youtube.com", "youtu.be", "www.youtu.be" };
         private string _link;
-        private VerifyLinkService _verifyLinkService;
+        private ValidateLinkService _validateLinkService;
+
+        #endregion
+
+        #region Public Properties
+
+        public BitmapImage bmp = new BitmapImage();
+        public YTVideo video = new YTVideo();
 
         #endregion
 
         #region Constructor
 
-        
+
 
         #endregion
 
@@ -40,6 +43,7 @@ namespace EpicYouTubeDownloader
         {
             _link = link;
             getThumbnail();
+            getMetaData();
         }
 
         private byte getThumbnail()
@@ -54,8 +58,17 @@ namespace EpicYouTubeDownloader
 
             var imgBytes = cli.DownloadData("http://img.youtube.com/vi/" + id + "/3.jpg");
 
-            File.WriteAllBytes(@"D:\Musik\09-06-2017\thumb.jpg", imgBytes);
+            using (var ms = new MemoryStream(imgBytes))
+            {
+                bmp.BeginInit();
+                bmp.StreamSource = ms;
+                bmp.CacheOption = BitmapCacheOption.OnLoad;
+                bmp.EndInit();
+                bmp.Freeze();
 
+                video.Thumbnail = bmp;
+            }
+            //File.WriteAllBytes(@"D:\Musik\09-06-2017\thumb.jpg", imgBytes);
             return pic;
         }
 
@@ -79,7 +92,44 @@ namespace EpicYouTubeDownloader
             return null;
         }
 
-        
+        private void getMetaData()
+        {
+            YouTube youtube = YouTube.Default;
+            ReturnError results = new ReturnError();
+
+            try
+            {
+                YouTubeVideo audio =
+                    youtube.GetAllVideos(_link)
+                        .Where(e => e.AudioFormat == AudioFormat.Aac && e.AdaptiveKind == AdaptiveKind.Audio)
+                        .ToList()
+                        .FirstOrDefault();
+
+                string filename = audio.FullName.Replace(" - YouTube", "");
+                
+                MediaFile inputFile = new MediaFile { Filename = audio.GetUri() };
+                
+                using (Engine engine = new Engine())
+                {
+                    engine.GetMetadata(inputFile);
+                    video.VideoName = filename;
+
+                    if (inputFile.Metadata.Duration.ToString().StartsWith("00"))
+                    {
+                        video.Length = inputFile.Metadata.Duration.ToString().Substring(3, 5);
+                    }
+                    else
+                    {
+                        video.Length = inputFile.Metadata.Duration.ToString().Substring(0, 8);
+                    }
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                results.errorNumber++;
+                results.errorLinks.Add(_link);
+            }
+        }
 
         #endregion
     }

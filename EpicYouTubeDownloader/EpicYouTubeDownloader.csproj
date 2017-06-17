@@ -131,8 +131,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Caliburn.Micro.3.1.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -177,15 +179,17 @@
     </Compile>
     <Compile Include="Bootstrap\Bootstrapper.cs" />
     <Compile Include="Models\Domain\ReturnError.cs" />
+    <Compile Include="Models\Domain\YTVideo.cs" />
     <Compile Include="Models\Domain\YTResponse.cs" />
     <Compile Include="Models\Domain\YTResponseContentDetails.cs" />
     <Compile Include="Models\Domain\YTResponseItem.cs" />
     <Compile Include="Models\Service\DownloadCoreService.cs" />
     <Compile Include="Models\Service\PasteCoreService.cs" />
-    <Compile Include="Models\Service\VerifyLinkService.cs" />
+    <Compile Include="Models\Service\ValidateLinkService.cs" />
     <Compile Include="ViewModels\Download\DownloadControlViewModel.cs" />
     <Compile Include="ViewModels\Download\DownloadListViewModel.cs" />
     <Compile Include="ViewModels\Download\DownloadViewModel.cs" />
+    <Compile Include="ViewModels\EventArguments\VideoAddedEventArgs.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\Download\DownloadControlView.xaml.cs">
       <DependentUpon>DownloadControlView.xaml</DependentUpon>
@@ -218,6 +222,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -230,7 +235,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\Theme\" />
+    <Folder Include="Resources\" />
     <Folder Include="ViewModels\Settings\" />
     <Folder Include="Views\Options\" />
   </ItemGroup>

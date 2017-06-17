@@ -12,7 +12,7 @@
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="55"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <ContentControl x:Name="DownloadControlViewModel" 
                         Grid.Row="0" 

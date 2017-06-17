@@ -6,6 +6,7 @@ using System;
 using System.Net;
 using System.Web;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using EpicYouTubeDownloader.Models.Domain;
@@ -20,9 +21,13 @@ namespace EpicYouTubeDownloader
         private int _songCount;
         private int convertedSong;
         private string link;
-        private const string YoutubeLinkRegex = "(?:.+?)?(?:\\/v\\/|watch\\/|\\?v=|\\&v=|youtu\\.be\\/|\\/v=|^youtu\\.be\\/)([a-zA-Z0-9_-]{11})+";
+
+        private const string YoutubeLinkRegex =
+            "(?:.+?)?(?:\\/v\\/|watch\\/|\\?v=|\\&v=|youtu\\.be\\/|\\/v=|^youtu\\.be\\/)([a-zA-Z0-9_-]{11})+";
+
         private static Regex regexExtractId = new Regex(YoutubeLinkRegex, RegexOptions.Compiled);
-        private static string[] validAuthorities = { "youtube.com", "www.youtube.com", "youtu.be", "www.youtu.be" };
+        private static string[] validAuthorities = {"youtube.com", "www.youtube.com", "youtu.be", "www.youtu.be"};
+
         #endregion
 
         #region Public Properties
@@ -54,7 +59,7 @@ namespace EpicYouTubeDownloader
                             .Where(e => e.AudioFormat == AudioFormat.Aac && e.AdaptiveKind == AdaptiveKind.Audio)
                             .ToList()
                             .FirstOrDefault();
-                    
+
                     string filename =
                         Path.ChangeExtension(Path.Combine(destPath, Path.GetFileNameWithoutExtension(audio.FullName)),
                             "mp3");
@@ -79,15 +84,15 @@ namespace EpicYouTubeDownloader
             }
             return results;
         }
-      
+
         public ReturnError downloadPlaylist(string playlistID, string destPath)
         {
             List<string> partLinks = new List<string>();
             List<string> totalLinks = new List<string>();
             List<string> tmpLinks = new List<string>();
-            string[] playlistURLs = playlistID.Split(new string[] { "list=" }, StringSplitOptions.None);
+            string[] playlistURLs = playlistID.Split(new string[] {"list="}, StringSplitOptions.None);
             ReturnError errorRes = new ReturnError();
-            
+
             YTResponse ytResponse = null;
             string url = @"https://www.googleapis.com/youtube/v3/playlistItems";
             var uriBuilder = new UriBuilder(url);
@@ -101,20 +106,21 @@ namespace EpicYouTubeDownloader
                 if (ytResponse != null && !string.IsNullOrWhiteSpace(ytResponse.nextPageToken))
                     query["pageToken"] = ytResponse.nextPageToken;
                 uriBuilder.Query = query.ToString();
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uriBuilder.ToString());
+                HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uriBuilder.ToString());
                 request.AutomaticDecompression = DecompressionMethods.GZip;
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                using (HttpWebResponse response = (HttpWebResponse) request.GetResponse())
                 using (Stream stream = response.GetResponseStream())
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     ytResponse = new JavaScriptSerializer().Deserialize<YTResponse>(reader.ReadToEnd());
                 }
-                string textResponse = string.Join(Environment.NewLine, ytResponse.items.Select(x => x.contentDetails.videoId).ToArray());
+                string textResponse = string.Join(Environment.NewLine,
+                    ytResponse.items.Select(x => x.contentDetails.videoId).ToArray());
                 partLinks.Add(textResponse);
             }
             foreach (string response in partLinks)
             {
-                tmpLinks = response.Split(new string[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+                tmpLinks = response.Split(new string[] {Environment.NewLine}, StringSplitOptions.None).ToList();
                 totalLinks = totalLinks.Concat(tmpLinks).ToList();
             }
             List<string> youtubesongs = totalLinks.ToList();
@@ -160,11 +166,13 @@ namespace EpicYouTubeDownloader
                     }
                 }
             }
-            catch { }
+            catch
+            {
+            }
 
             return null;
         }
-
+        
         #endregion
     }
 }
