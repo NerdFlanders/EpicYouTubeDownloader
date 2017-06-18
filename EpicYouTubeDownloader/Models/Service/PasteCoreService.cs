@@ -63,10 +63,13 @@ namespace EpicYouTubeDownloader
                 bmp.BeginInit();
                 bmp.StreamSource = ms;
                 bmp.CacheOption = BitmapCacheOption.OnLoad;
+                bmp.DecodePixelHeight = 35;
+                bmp.DecodePixelWidth = 35;
                 bmp.EndInit();
                 bmp.Freeze();
-
+                
                 video.Thumbnail = bmp;
+                bmp = new BitmapImage();
             }
             //File.WriteAllBytes(@"D:\Musik\09-06-2017\thumb.jpg", imgBytes);
             return pic;

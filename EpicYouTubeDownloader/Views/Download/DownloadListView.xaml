@@ -9,17 +9,19 @@
         <DataGrid x:Name="Videos"
                   ItemsSource="{Binding Path=Videos}"
                   ColumnWidth="*"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="None"
                   cal:Message.Attach="[Event RowEditEnding] = [Action OnRowEditEnding($source, $eventArgs)]">
             <DataGrid.Columns>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Image Source="{Binding Thumbnail}" />
+                <DataGridTemplateColumn >
+                   <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate> 
+                            <Image Source="{Binding Thumbnail}" Height="35" MinWidth="25" Width="Auto"  />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding VideoName}" Header="ping"  Width="50" />
-                <DataGridTextColumn Binding="{Binding Length}"  />
+                <DataGridTextColumn Binding="{Binding VideoName}" MinWidth="55" Width="Auto" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Length}" Width="*" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
