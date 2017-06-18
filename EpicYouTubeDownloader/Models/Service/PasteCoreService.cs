@@ -109,7 +109,8 @@ namespace EpicYouTubeDownloader
                         .FirstOrDefault();
 
                 string filename = audio.FullName.Replace(" - YouTube", "");
-                
+                filename = filename.Replace(".mp4", "");
+
                 MediaFile inputFile = new MediaFile { Filename = audio.GetUri() };
                 
                 using (Engine engine = new Engine())
