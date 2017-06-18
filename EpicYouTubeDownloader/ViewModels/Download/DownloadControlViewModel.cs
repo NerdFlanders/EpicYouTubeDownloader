@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Net;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
@@ -34,6 +32,7 @@ namespace EpicYouTubeDownloader.ViewModels.Download
         private ValidateLinkService _validateLinkService = new ValidateLinkService();
         private PasteCoreService _pasteCoreService = new PasteCoreService();
         private YTVideo _video = new YTVideo();
+        private bool _isValidated;
 
         private readonly IEventAggregator _eventAggregator;
         
@@ -49,10 +48,43 @@ namespace EpicYouTubeDownloader.ViewModels.Download
 
         #endregion
 
+        #region Public Methods
+
         public void Paste()
         {
             _singleLink = Clipboard.GetText();
-            if (_validateLinkService.validateLink(_singleLink))
+
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+            backgroundWorker.DoWork += ValidateLink;
+            backgroundWorker.RunWorkerCompleted += OnValidatedLink;
+
+            backgroundWorker.WorkerReportsProgress = true;
+            backgroundWorker.RunWorkerAsync();
+        }
+
+        public void Download()
+        {
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+            backgroundWorker.DoWork += DownloadVideo;
+            backgroundWorker.RunWorkerCompleted += OnDownloadedVideo;
+
+            backgroundWorker.WorkerReportsProgress = true;
+            backgroundWorker.RunWorkerAsync();
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void ValidateLink(object sender, DoWorkEventArgs doWorkEventArgs)
+        {
+            _validateLinkService.validateLink(_singleLink);
+        }
+
+        private void OnValidatedLink(object sender, RunWorkerCompletedEventArgs eventargs)
+        {
+            _isValidated = _validateLinkService.Validated;
+            if (_isValidated)
             {
                 _links.Add(_singleLink);
                 _pasteCoreService.getVideoData(_singleLink);
@@ -64,13 +96,20 @@ namespace EpicYouTubeDownloader.ViewModels.Download
                     action => { Task.Factory.StartNew(action); });
             }
         }
-
-        public void Download()
+        
+        private void DownloadVideo(object sender, DoWorkEventArgs doWorkEventArgs)
         {
-            //add link to downloadlist view with thumbnail, name
             DownloadCoreService s = new DownloadCoreService();
-            if(_links.Count > 0)
+            if (_links.Count > 0)
                 s.DownloadMP3(_links, @"D:\Musik\09-06-2017");
         }
+
+        private void OnDownloadedVideo(object sender, RunWorkerCompletedEventArgs eventargs)
+        {
+
+        }
+
+        #endregion
+
     }
 }

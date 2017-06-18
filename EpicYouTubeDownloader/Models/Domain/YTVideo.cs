@@ -7,5 +7,6 @@ namespace EpicYouTubeDownloader.Models.Domain
         public string VideoName { get; set; }
         public string Length { get; set; }
         public BitmapImage Thumbnail { get; set; }
+        public int Progress { get; set; }
     }
 }

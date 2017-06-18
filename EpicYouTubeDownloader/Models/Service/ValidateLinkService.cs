@@ -12,7 +12,15 @@ namespace EpicYouTubeDownloader
 
         #endregion
 
-        public bool validateLink(string link)
+        #region Public Properties
+
+        public bool Validated;
+
+        #endregion
+        
+        #region Public Methods
+
+        public void validateLink(string link)
         {
             _link = link;
             bool isValidate = false;
@@ -38,7 +46,9 @@ namespace EpicYouTubeDownloader
                     isValidate = false;
                 }
             }
-            return isValidate;
+            Validated = isValidate;
         }
+
+        #endregion
     }
 }

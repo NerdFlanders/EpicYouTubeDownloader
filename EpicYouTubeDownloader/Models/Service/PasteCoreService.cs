@@ -42,6 +42,7 @@ namespace EpicYouTubeDownloader
         public void getVideoData(string link)
         {
             _link = link;
+
             getThumbnail();
             getMetaData();
         }

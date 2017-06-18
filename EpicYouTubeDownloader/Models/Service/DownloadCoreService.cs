@@ -6,7 +6,6 @@ using System;
 using System.Net;
 using System.Web;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using EpicYouTubeDownloader.Models.Domain;
@@ -74,6 +73,7 @@ namespace EpicYouTubeDownloader
                     {
                         engine.GetMetadata(inputFile);
                         engine.Convert(inputFile, outputFile);
+                        engine.ConvertProgressEvent += engine_ConvertProgressEvent;
                     }
                 }
                 catch (NullReferenceException e)
@@ -131,6 +131,17 @@ namespace EpicYouTubeDownloader
             errorRes = DownloadMP3(youtubesongs, destPath);
             return errorRes;
         }
+
+        private void engine_ConvertProgressEvent(object sender, ConvertProgressEventArgs eventArgs)
+        {
+            //if ((convertedSong * 100 + (int)((eventArgs.ProcessedDuration.TotalSeconds / eventArgs.TotalDuration.TotalSeconds) * 100)) < )
+            //{
+            //    convertedSong++;
+            //}
+            int i  = eventArgs.TotalDuration.Seconds;
+            int k = eventArgs.ProcessedDuration.Seconds;
+        }
+
 
         private byte getThumbnail(string link)
         {

@@ -2,21 +2,25 @@
 using System.Windows.Controls;
 using Caliburn.Micro;
 using EpicYouTubeDownloader.ViewModels.Download;
+using EpicYouTubeDownloader.ViewModels.Settings;
 
 namespace EpicYouTubeDownloader.ViewModels
 {
     internal class ShellViewModel : Conductor<object>
     {
         public DownloadViewModel DownloadViewModel { get; set; }
+        public SettingsViewModel SettingsViewModel { get; set; }
 
         //public OptionsViewModel CustomerViewModel { get; set; }
 
         private const int ActiveItemMargin = -2;
         private const int InactiveItemMargin = 0;
 
-        public ShellViewModel(DownloadViewModel downloadViewModel)
+        public ShellViewModel(DownloadViewModel downloadViewModel,
+                            SettingsViewModel settingsViewModel)
         {
             DownloadViewModel = downloadViewModel;
+            SettingsViewModel = settingsViewModel;
 
             DisplayName = "EpicYouTubeDownloader";
         }

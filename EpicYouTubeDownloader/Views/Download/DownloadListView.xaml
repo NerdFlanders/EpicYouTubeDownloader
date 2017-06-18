@@ -3,7 +3,6 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:cal="http://www.caliburnproject.org"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" >
     <Grid>
@@ -26,7 +25,7 @@
                         <Image Source="{Binding Thumbnail}" Grid.RowSpan="2" />
                         <Label Content="{Binding VideoName}" Grid.Column="1" Grid.Row="0" />
                         <Label Content="{Binding Length}" Grid.Column="1" Grid.Row="1" />
-                        <ProgressBar Grid.Column="2" Grid.RowSpan="2" MinWidth="240" Margin="0,0,30,0"/>
+                        <ProgressBar x:Name="ProgressBar" Grid.Column="2" Grid.RowSpan="2" MinWidth="240" Margin="0,0,30,0" Minimum="0" Maximum="100"/>
                         <materialDesign:PackIcon Kind="Download" Height="25" Width="25" Grid.Column="3" Grid.RowSpan="2" Margin="0,10,0,0"  />
                         <materialDesign:PackIcon Kind="Folder" Height="25" Width="25" Grid.Column="4" Grid.RowSpan="2" Margin="0,10,0,0"/>
                     </Grid>
