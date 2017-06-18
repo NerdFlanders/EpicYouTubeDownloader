@@ -23,16 +23,16 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Vertical" >
                     <Label>Destination</Label>
-                    <TextBox x:Name="Destination" />
+                    <TextBox x:Name="Destination" Foreground="Black" />
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Vertical">
                     <Label>Quality</Label>
                     <ComboBox x:Name="SampleRate"
-                          SelectedItem="{Binding DefaultSampleRate}">
+                          SelectedItem="{Binding DefaultSampleRate}" Foreground="Black">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding SampleRate}" />
+                                <TextBlock Text="{Binding SampleRate}" Foreground="Black" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
