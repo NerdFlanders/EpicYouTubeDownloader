@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaToolkit", "MediaToolkit\MediaToolkit.csproj", "{124AB335-EEAC-416F-B06B-80AD3CF56E38}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicYouTubeDownloader", "EpicYouTubeDownloader\EpicYouTubeDownloader.csproj", "{7AB2A1A2-7836-4E1A-A3C6-29ED7F5C3471}"
+	ProjectSection(ProjectDependencies) = postProject
+		{124AB335-EEAC-416F-B06B-80AD3CF56E38} = {124AB335-EEAC-416F-B06B-80AD3CF56E38}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

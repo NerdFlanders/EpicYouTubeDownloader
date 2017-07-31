@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net;
 using System.Linq;
-using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Media.Imaging;
 using EpicYouTubeDownloader.Models.Domain;
@@ -105,7 +104,7 @@ namespace EpicYouTubeDownloader
             {
                 YouTubeVideo audio =
                     youtube.GetAllVideos(_link)
-                        .Where(e => e.AudioFormat == AudioFormat.Aac && e.AdaptiveKind == AdaptiveKind.Audio)
+                        //.Where(e => e.AudioFormat == AudioFormat.Aac && e.AdaptiveKind == AdaptiveKind.Audio)
                         .ToList()
                         .FirstOrDefault();
 
