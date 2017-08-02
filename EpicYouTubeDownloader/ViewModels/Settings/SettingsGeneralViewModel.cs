@@ -60,28 +60,20 @@ namespace EpicYouTubeDownloader.ViewModels.Settings
         }
 
         private void InitializeValues()
-        {
-
-            if (ConfigurationSettings.AppSettings.Count < 2)
+        { 
+            if (Properties.Settings.Default.Destination == null)
             {
                 _destination = Environment.SpecialFolder.MyMusic.ToString();
                 Destination = _destination;
             }
             else
             {
-                Destination = ConfigurationSettings.AppSettings.Get("Destination");
-                DefaultSampleRate = ConfigurationSettings.AppSettings.Get("SampleRate");
+                Destination = Properties.Settings.Default.Destination;
+                DefaultSampleRate = Properties.Settings.Default.SampleRate;
             }
             GetEnumerables();
-            
         }
-
-        private void CreateFile()
-        {
-            ConfigurationSettings.AppSettings.Add("Destination", _destination);
-            ConfigurationSettings.AppSettings.Add("SampleRate", SampleRate[0]);
-        }
-
+        
         private void SavetoFile()
         {
             

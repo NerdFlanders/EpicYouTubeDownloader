@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using EpicYouTubeDownloader.Models.Domain;
+using EpicYouTubeDownloader.Properties;
 using EpicYouTubeDownloader.ViewModels.EventArguments;
 
 namespace EpicYouTubeDownloader.ViewModels.Download
@@ -33,6 +36,7 @@ namespace EpicYouTubeDownloader.ViewModels.Download
         private PasteCoreService _pasteCoreService = new PasteCoreService();
         private YTVideo _video = new YTVideo();
         private bool _isValidated;
+        private string _destination;
 
         private readonly IEventAggregator _eventAggregator;
         
@@ -101,7 +105,10 @@ namespace EpicYouTubeDownloader.ViewModels.Download
         {
             DownloadCoreService s = new DownloadCoreService();
             if (_links.Count > 0)
-                s.DownloadMP3(_links, @"D:\Musik\09-06-2017");
+            {
+                _destination = Properties.Settings.Default.Destination;
+                s.DownloadMP3(_links, _destination);
+            }
         }
 
         private void OnDownloadedVideo(object sender, RunWorkerCompletedEventArgs eventargs)

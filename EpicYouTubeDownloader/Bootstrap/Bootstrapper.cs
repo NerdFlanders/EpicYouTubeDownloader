@@ -11,6 +11,7 @@ namespace EpicYouTubeDownloader.Bootstrap
     public class Bootstrapper : BootstrapperBase
     {
         private IKernel _ninject;
+        private InitialSettingsService _initialSettingsService = new InitialSettingsService();
 
         public Bootstrapper()
         {
@@ -28,6 +29,8 @@ namespace EpicYouTubeDownloader.Bootstrap
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
             DisplayRootViewFor<ShellViewModel>();
+
+            _initialSettingsService.setupFoders();
         }
 
         protected override void OnExit(object sender, EventArgs eventArgs)

@@ -155,7 +155,7 @@ namespace EpicYouTubeDownloader
 
             var imgBytes = cli.DownloadData("http://img.youtube.com/vi/" + id + "/3.jpg");
 
-            File.WriteAllBytes(@"D:\Musik\09-06-2017\thumb.jpg", imgBytes);
+            //File.WriteAllBytes(@"D:\Musik\09-06-2017\thumb.jpg", imgBytes);
 
             return pic;
         }
