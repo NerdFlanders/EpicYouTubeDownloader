@@ -53,7 +53,7 @@ namespace EpicYouTubeDownloader
             {
                 if (link.Contains("&list="))
                 {
-                    downloadPlaylist(link, destPath);
+                    downloadPlaylist(link, destPath, "", 0);
                 }
                 else
                 {
@@ -93,12 +93,23 @@ namespace EpicYouTubeDownloader
             return results;
         }
 
-        public ReturnError downloadPlaylist(string playlistID, string destPath)
+        public ReturnError downloadPlaylist(string playlistLink, string destPath, string pageToken, int index)
         {
             List<string> partLinks = new List<string>();
             List<string> totalLinks = new List<string>();
             List<string> tmpLinks = new List<string>();
-            string[] playlistURLs = playlistID.Split(new string[] {"list="}, StringSplitOptions.None);
+            string playListId = "";
+            
+            string[] playlistIDRAW = playlistLink.Split(new string[] {"list="}, StringSplitOptions.None);
+            if (playlistIDRAW[1].Contains("&index"))
+            {
+                playlistIDRAW = playlistIDRAW[1].Split(new string[] {"&index="}, StringSplitOptions.None);
+                playListId = playlistIDRAW[0];
+            }
+            else
+            {
+                playListId = playlistIDRAW[1];
+            }
             ReturnError errorRes = new ReturnError();
 
 
@@ -108,7 +119,8 @@ namespace EpicYouTubeDownloader
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
             query["part"] = "contentDetails";
             query["maxResults"] = "50";
-            query["playlistId"] = playlistURLs[1];
+            query["playlistId"] = playListId;
+            query["nextPageToken"] = pageToken;
             query["key"] = "AIzaSyCtzP23AG4P_K5WNIjqb7AOFnhWNyLIkoE";
             while (ytResponse == null || !string.IsNullOrWhiteSpace(ytResponse.nextPageToken))
             {
@@ -132,12 +144,25 @@ namespace EpicYouTubeDownloader
                 tmpLinks = response.Split(new string[] {Environment.NewLine}, StringSplitOptions.None).ToList();
                 totalLinks = totalLinks.Concat(tmpLinks).ToList();
             }
+
             List<string> youtubesongs = totalLinks.ToList();
-            for (int i = 0; i < youtubesongs.Count; i++)
+
+            for (int i = index; i < youtubesongs.Count; i++)
             {
                 youtubesongs[i] = "https://www.youtube.com/watch?v=" + youtubesongs[i];
+                index = i;
             }
-            errorRes = DownloadMP3(youtubesongs, destPath);
+
+            if (ytResponse.nextPageToken != null)
+            {
+                downloadPlaylist(playlistLink, destPath, ytResponse.nextPageToken, index);
+            }
+            else
+            {
+                errorRes = DownloadMP3(youtubesongs, destPath);
+                return errorRes;
+            }
+
             return errorRes;
         }
 
