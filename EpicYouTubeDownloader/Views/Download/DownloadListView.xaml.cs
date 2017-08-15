@@ -24,5 +24,10 @@ namespace EpicYouTubeDownloader.Views.Download
         {
             InitializeComponent();
         }
+
+        private void UIElement_OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

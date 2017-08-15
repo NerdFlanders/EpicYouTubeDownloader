@@ -1,4 +1,8 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Configuration;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Input;
 using Caliburn.Micro;
 using EpicYouTubeDownloader.Models.Domain;
 using EpicYouTubeDownloader.ViewModels.EventArguments;
@@ -67,7 +71,15 @@ namespace EpicYouTubeDownloader.ViewModels.Download
 
         #endregion
 
+        public void OpenFolder(object sender, MouseButtonEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void OpenFolder()
+        {
+            Process.Start(ConfigurationSettings.AppSettings.Get("Destination"));
+        }
 
         public DownloadListViewModel(IEventAggregator eventAggregator)
         {

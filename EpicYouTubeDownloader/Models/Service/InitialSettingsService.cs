@@ -19,14 +19,15 @@ namespace EpicYouTubeDownloader
         {
             _destination = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
             _defaultSampleRate = AudioSampleRate.Default.ToString();
+            string test = Settings.Default.Destination;
 
-            if (Settings.Default.Destination != "")
+            if (Settings.Default.Destination == "")
             {
                 Settings.Default.Destination = _destination;
                 Settings.Default.Save();
             }
 
-            if (Settings.Default.SampleRate != "")
+            if (Settings.Default.SampleRate == "")
             {
                 Settings.Default.SampleRate = _defaultSampleRate;
                 Settings.Default.Save();

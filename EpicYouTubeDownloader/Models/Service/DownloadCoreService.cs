@@ -51,35 +51,43 @@ namespace EpicYouTubeDownloader
             results.errorLinks = new List<string>();
             foreach (string link in links)
             {
-                try
+                if (link.Contains("&list="))
                 {
-                    YouTubeVideo audio =
-                        youtube.GetAllVideos(link)
-                            .Where(e => e.AudioFormat == AudioFormat.Aac && e.AdaptiveKind == AdaptiveKind.Audio)
-                            .ToList()
-                            .FirstOrDefault();
-
-                    string filename =
-                        Path.ChangeExtension(Path.Combine(destPath, Path.GetFileNameWithoutExtension(audio.FullName)),
-                            "mp3");
-                    filename = filename.Replace(" - YouTube", "");
-
-                    MediaFile inputFile = new MediaFile {Filename = audio.GetUri()};
-                    MediaFile outputFile = new MediaFile {Filename = filename};
-
-                    getThumbnail(link);
-
-                    using (Engine engine = new Engine())
-                    {
-                        engine.GetMetadata(inputFile);
-                        engine.Convert(inputFile, outputFile);
-                        engine.ConvertProgressEvent += engine_ConvertProgressEvent;
-                    }
+                    downloadPlaylist(link, destPath);
                 }
-                catch (NullReferenceException e)
+                else
                 {
-                    results.errorNumber++;
-                    results.errorLinks.Add(link);
+                    try
+                    {
+                        YouTubeVideo audio =
+                            youtube.GetAllVideos(link)
+                                .Where(e => e.AudioFormat == AudioFormat.Aac && e.AdaptiveKind == AdaptiveKind.Audio)
+                                .ToList()
+                                .FirstOrDefault();
+
+                        string filename =
+                            Path.ChangeExtension(
+                                Path.Combine(destPath, Path.GetFileNameWithoutExtension(audio.FullName)),
+                                "mp3");
+                        filename = filename.Replace(" - YouTube", "");
+
+                        MediaFile inputFile = new MediaFile {Filename = audio.GetUri()};
+                        MediaFile outputFile = new MediaFile {Filename = filename};
+
+                        getThumbnail(link);
+
+                        using (Engine engine = new Engine())
+                        {
+                            engine.GetMetadata(inputFile);
+                            engine.Convert(inputFile, outputFile);
+                            engine.ConvertProgressEvent += engine_ConvertProgressEvent;
+                        }
+                    }
+                    catch (NullReferenceException e)
+                    {
+                        results.errorNumber++;
+                        results.errorLinks.Add(link);
+                    }
                 }
             }
             return results;
@@ -92,6 +100,7 @@ namespace EpicYouTubeDownloader
             List<string> tmpLinks = new List<string>();
             string[] playlistURLs = playlistID.Split(new string[] {"list="}, StringSplitOptions.None);
             ReturnError errorRes = new ReturnError();
+
 
             YTResponse ytResponse = null;
             string url = @"https://www.googleapis.com/youtube/v3/playlistItems";
